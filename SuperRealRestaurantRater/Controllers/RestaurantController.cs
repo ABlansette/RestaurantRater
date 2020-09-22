@@ -59,5 +59,33 @@ namespace SuperRealRestaurantRater.Controllers
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Restaurant restaurant)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Restaurants.Add(restaurant);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(restaurant);
+
+        }
+
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Restaurant restaurant = _db.Restaurants.Find(id);
+            if (restaurant == null)
+            {
+                return HttpNotFound();
+            }
+            return View(restaurant);
+        }
     }
 }
